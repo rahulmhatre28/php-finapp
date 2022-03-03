@@ -1,0 +1,21 @@
+Array
+(
+    [childs] => Array
+        (
+            [0] => 8
+            [1] => 9
+        )
+
+    [parents] => Array
+        (
+            [0] => 7
+            [1] => 6
+            [2] => 5
+        )
+
+    [userid] => 8
+    [roleid] => 5
+    [parentid] => 7
+    [lazyEvent] => {"first":0,"rows":10,"sortOrder":1,"filters":{"ref_no":{"value":null,"matchMode":"startsWith"},"applicant_name":{"value":null,"matchMode":"startsWith"},"sales_person_lbl":{"value":null,"matchMode":"startsWith"},"created_at":{"value":null,"matchMode":"startsWith"}},"globalFilter":null}
+    [pagetype] => assigned
+)
