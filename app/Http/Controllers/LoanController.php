@@ -70,4 +70,36 @@ class LoanController extends Controller
             return $this->error($e->getMessage(),500);
         }
     }
+
+    public function assignPerson(Request $request) {
+        try {
+            $data = $this->loanService->assignPerson($request);
+            return $this->success($data,'Sales Person assigned successfully');
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),500);
+        }
+    }
+
+    public function disbursed(Request $request) {
+        try {
+            $data = $this->loanService->disbursed($request);
+            return $this->success($data,'Loan disbursed successfully');
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),500);
+        }
+    }
+
+    public function download(Request $request,int $id) {
+        try {
+            $data = $this->loanService->download($id);
+            header("Content-Type: application/zip");
+            header("Content-Transfer-Encoding: Binary");
+            header("Content-Length: ".filesize($data));
+            header("Content-Disposition: attachment; filename=\"".basename($data)."\"");
+            readfile($data);
+        exit;
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),500);
+        }
+    }
 }

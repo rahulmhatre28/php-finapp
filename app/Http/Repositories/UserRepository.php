@@ -22,14 +22,20 @@ class UserRepository
         $user->email = $data['email'];
         $user->phone = $data['phone'];
         $user->role_id = $data['role_id'];
-        $user->parent_id = empty($data['parent_id'])?0:$data['parent_id'];
+        if($data['roleid']==7) {
+            $user->parent_id = $data['userid'];
+        } else {
+            $user->parent_id = empty($data['parent_id'])?0:$data['parent_id'];
+        }
         $user->password = Hash::make($data['password']);
         // if(!$data['active']){
         //     $user->deleted_at = date('Y-m-d H:i:s');
         // } else {
         //     $user->deleted_at = null;
         // }
-        $user->executive = $data['executive'];
+        $user->bank_id = $data['bank_id'];
+        $user->state_id = $data['state_id'];
+        $user->branch = $data['branch'];
         $user->created_at = date('Y-m-d H:i:s');
         $user->save();
         return $user->fresh();
@@ -68,7 +74,13 @@ class UserRepository
         $user->email = $data['email'];
         $user->phone = $data['phone'];
         $user->role_id = $data['role_id'];
-        $user->parent_id = $data['parent_id'];
+        if($data['roleid']==7) {
+            $user->parent_id = $data['userid'];
+        } else {
+            $user->parent_id = $data['parent_id'];
+        }
+        $user->bank_id = $data['bank_id'];
+        $user->state_id = $data['state_id'];
         if($data['password']!=='@@@@@@@@') {
             $user->password = Hash::make($data['password']);
         }
@@ -77,7 +89,7 @@ class UserRepository
         } else {
             $user->deleted_at = null;
         }
-        $user->executive = $data['executive'];
+        $user->branch = $data['branch'];
         $user->updated_at = date('Y-m-d H:i:s');
         $user->update();
         return $user->fresh();
@@ -89,8 +101,33 @@ class UserRepository
         }
         else 
         {
-            $children = $this->user::select(['id','first_name','last_name'])->where('parent_id',$data['id'])->get();
+            $children = $this->user::select(['id','first_name','last_name'])
+                        ->where('parent_id',$data['id'])
+                        ->where('role_id',($data['type']+1))
+                        ->get();
         }
         return $children;
+    }
+
+    public function dashboard($data) {
+        $users = $this->user::
+                whereIn('parent_id',$data['childs'])
+                ->where('role_id',9)
+                ->whereBetween('created_at',[$data['fromdate'],$data['todate']])->count();
+
+        return ['users'=>$users];
+
+    }
+
+    public function ddl($data) {
+        $users = $this->user::with(['role' => function ($query) {
+            $query->select('id','name');
+        }])
+        ->select('id','first_name','last_name','role_id')
+        ->whereIn('parent_id',$data['childs'])
+        ->get();
+
+        return $users;
+
     }
 }

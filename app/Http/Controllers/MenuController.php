@@ -160,4 +160,24 @@ class MenuController extends Controller
         }
         return response()->json($result, $result['status']);
     }
+
+    public function menuAccess(Request $request)
+    {
+        try {
+            $data = $this->menuService->menuAccess($request);
+            return $this->success($data);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),200);
+        }
+    }
+
+    public function menuListByRole(Request $request)
+    {
+        try {
+            $data = $this->menuService->menuListByRole($request);
+            return $this->success($data);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),200);
+        }
+    }
 }

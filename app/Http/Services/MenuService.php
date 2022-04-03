@@ -133,4 +133,14 @@ class MenuService
         return $result;
     }
 
+    public function menuAccess($data)
+    {
+        return $this->menuRepository->menuAccess($data);
+    }
+
+    public function menuListByRole($data)
+    {
+        return $this->menuRepository->menuListByRole($data);
+    }
+
 }

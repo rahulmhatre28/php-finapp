@@ -68,4 +68,8 @@ class User extends Authenticatable
     public function parent() { 
         return $this->belongsTo(Self::class, 'parent_id', 'id'); 
     }
+
+    public function bank() {
+        return $this->belongsTo(Bank::class);
+    }
 }

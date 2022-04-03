@@ -126,4 +126,15 @@ class RoleController extends Controller
         }
         return response()->json($result, $result['status']);
     }
+
+    public function getById(Request $request)
+    {
+        try {
+            $id = $request->roleid;
+            $data = $this->roleService->getById($id);
+            return $this->success($data);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),200);
+        }
+    }
 }

@@ -61,4 +61,13 @@ class UserController extends Controller
             return $this->error($e->getMessage(),500);
         } 
     }
+
+    public function ddl(Request $request) {
+        try {
+            $data = $this->userService->ddl($request);
+            return $this->success($data);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),500);
+        } 
+    }
 }

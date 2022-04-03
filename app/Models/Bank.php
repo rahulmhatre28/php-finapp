@@ -9,4 +9,8 @@ class Bank extends Model
 
    protected $table = 'banks';
 
+   public function users(){
+      return $this->hasMany(User::class);
+   }
+
 }

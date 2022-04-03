@@ -44,4 +44,20 @@ class LoanService
     public function assignLender($request) {
         return $this->loanRepository->assignLender($request);
     }
+
+    public function assignPerson($request) {
+        return $this->loanRepository->assignPerson($request);
+    }
+
+    public function disbursed($request) {
+        return $this->loanRepository->disbursed($request);
+    }
+
+    public function download($id) {
+        return $this->loanRepository->download($id);
+    }
+
+    public function dashboard($data) {
+        return $this->loanRepository->dashboard($data);
+    }
 }

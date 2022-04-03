@@ -22,16 +22,19 @@ class UserService
 
 
     public function saveUserData(Request $data){
-        $validatedData = $data->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'string|max:255',
-            'phone' => 'required|string|max:12',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:4',
-            'role_id' => 'string',
-            'parent_id' => 'string',
-        ]);
-        return $this->userRepository->save($validatedData);
+        // $validatedData = $data->validate([
+        //     'first_name' => 'required|string|max:255',
+        //     'last_name' => 'string|max:255',
+        //     'phone' => 'required|string|max:12',
+        //     'email' => 'required|string|email|max:255|unique:users',
+        //     'password' => 'required|string|min:4',
+        //     'role_id' => 'string',
+        //     'parent_id' => 'string',
+        //     'bank_id' => 'string',
+        //     'state_id' => 'string',
+        //     'branch' => 'string',
+        // ]);
+        return $this->userRepository->save($data);
     }
 
     public function getAll($data) {
@@ -57,5 +60,13 @@ class UserService
 
     public function getChildDdl($data) {
         return $this->userRepository->getChildDdl($data);
+    }
+
+    public function dashboard($data) {
+        return $this->userRepository->dashboard($data);
+    }
+    
+    public function ddl($data) {
+        return $this->userRepository->ddl($data);
     }
 }

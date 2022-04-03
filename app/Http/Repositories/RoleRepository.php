@@ -42,7 +42,7 @@ class RoleRepository
     {
         return $this->Role
             ->where('id', $id)
-            ->get();
+            ->first();
     }
 
     /**

@@ -112,5 +112,4 @@ class RoleService
         $result = $this->RoleRepository->save($data);
         return $result;
     }
-
 }
