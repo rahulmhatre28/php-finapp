@@ -61,4 +61,12 @@ class ChannelService
     public function dropdown($data) {
         return $this->channelRepository->dropdown($data);
     }
+
+    public function borrowerdropdown($data) {
+        return $this->channelRepository->borrowerdropdown($data);
+    }
+
+    public function banks($data) {
+        return $this->channelRepository->banks($data);
+    }
 }

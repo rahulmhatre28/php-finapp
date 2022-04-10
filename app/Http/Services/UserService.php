@@ -21,7 +21,7 @@ class UserService
     }
 
 
-    public function saveUserData(Request $data){
+    public function saveUserData(Request $request){
         // $validatedData = $data->validate([
         //     'first_name' => 'required|string|max:255',
         //     'last_name' => 'string|max:255',
@@ -34,6 +34,7 @@ class UserService
         //     'state_id' => 'string',
         //     'branch' => 'string',
         // ]);
+        $data = $request->all();
         return $this->userRepository->save($data);
     }
 

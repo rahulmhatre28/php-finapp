@@ -55,7 +55,7 @@ class AuthController extends Controller
         }
         return $this->success([
             'token' => auth()->user()->createToken('auth_token')->plainTextToken,
-            "user" => User::select("id","first_name", "last_name", "email","role_id")->where("id", auth()->id())->first()->toArray()
+            "user" => User::select("id","first_name", "last_name", "email","role_id","parent_id")->where("id", auth()->id())->first()->toArray()
         ]);
     }
 

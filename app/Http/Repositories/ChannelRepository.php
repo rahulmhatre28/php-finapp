@@ -35,7 +35,7 @@ class ChannelRepository
             'email'=>$data['email'],
             'phone'=>$data['phone'],
             'role_id'=>'9',
-            'parent_id'=>$data['userid'],
+            'parent_id'=>$data['executive'],
             'password'=>(string) $data['phone']
         ]);
         $createdUser = $this->userService->saveUserData($userRequest);
@@ -50,6 +50,8 @@ class ChannelRepository
             $channel->gst = $data['gst'];
             $channel->created_at = date('Y-m-d H:i:s');
             $channel->created_by = $data['userid'];
+            $channel->user_id = $createdUser->id;
+            $channel->executive = $createdUser->parent_id;
             $channel->save();
         }
 
@@ -81,7 +83,7 @@ class ChannelRepository
             }
         }
         $obj = new $this->channel;
-        $result = $obj->where($filters)->whereIn('created_by',$data['childs'])->offset($event['first'])->limit($event['rows'])->get();
+        $result = $obj->where($filters)->whereIn('created_by',$data['childs'])->orWhere('executive',$data['userid'])->offset($event['first'])->limit($event['rows'])->get();
         $total = $obj->where($filters)->count();
         return ['records'=>$result,'total'=>$total];
     }
@@ -90,7 +92,11 @@ class ChannelRepository
         if($data['roleid']==9) {
             return $this->channel::with('banks')->where('user_id',$data['id'])->first();
         }
-        return $this->channel::with('banks')->find($data['id']);
+        return $this->channel::with(['banks','executiveList'=>function($query){
+            $query->select('id','first_name','last_name','parent_id');
+        },'executiveList.parent.parent.parent'=>function($query){
+            $query->select('id','first_name','last_name','parent_id');
+        }])->find($data['id']);
     }
 
     public function update($data,$id) {
@@ -135,6 +141,18 @@ class ChannelRepository
     public function dropdown($data) {
         $obj = new $this->channel;
         $result = $obj->select('id','name')->where('executive',$data['id'])->orderBy('name')->get();
+        return $result;
+    }
+
+    public function borrowerdropdown($data) {
+        $obj = new $this->user;
+        $result = $obj->select('id','first_name','last_name')->where('parent_id',$data['id'])->where('role_id',8)->orderBy('first_name')->get();
+        return $result;
+    }
+
+    public function banks($data) {
+        $obj = new $this->channelBank;
+        $result = $obj->select('id','bank','branchname')->where('channel_id',$data['id'])->orderBy('bank')->get();
         return $result;
     }
 }

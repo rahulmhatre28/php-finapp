@@ -70,4 +70,22 @@ class ChannelController extends Controller
             return $this->error($e->getMessage(),500);
         } 
     }
+
+    public function borrowerdropdown(Request $request){
+        try {
+            $data = $this->channelService->borrowerdropdown($request);
+            return $this->success($data);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),500);
+        } 
+    }
+
+    public function banks(Request $request){
+        try {
+            $data = $this->channelService->banks($request);
+            return $this->success($data);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),500);
+        } 
+    }
 }

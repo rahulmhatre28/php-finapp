@@ -102,4 +102,14 @@ class LoanController extends Controller
             return $this->error($e->getMessage(),500);
         }
     }
+
+    public function getDisbursedDetails(Request $request,$id){
+        try {
+            $request->merge(['id'=>$id]);
+            $data = $this->loanService->getDisbursedDetails($request);
+            return $this->success($data);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(),500);
+        }
+    }
 }

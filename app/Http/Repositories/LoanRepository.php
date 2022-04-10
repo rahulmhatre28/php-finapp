@@ -14,6 +14,7 @@ use App\Traits\Mailer;
 use Illuminate\Http\Request;
 use DB;
 use Exception;
+use ZipArchive;
 
 class LoanRepository
 {
@@ -48,7 +49,9 @@ class LoanRepository
             DB::beginTransaction();
             $loan = new $this->loan;
             $loan->ref_no = $ref_no;
-            $loan->channel_id = $data->channel_id;
+            $loan->loan_through = $data->loan_through;
+            $loan->borrower_id = ($data->borrower_id=='null')?null:$data->borrower_id;
+            $loan->channel_id = ($data->channel_id=='null')?null:$data->channel_id;
             $loan->loan_option_type = $data->loan_option_type;
             $loan->loan_type = $data->loan_type;
             $loan->loan_other_type = $data->loan_other_type;
@@ -565,13 +568,13 @@ class LoanRepository
                 $loanDocument->insert($documents);   
             }
 
-            if(!empty($data['remark'])) {
+            if($data['remark']!='null') {
                 $remark = new $this->remark;
                 $remark->loan_id=$loan->id;
                 $remark->remark=$data['remark'];
                 $remark->created_at=date('Y-m-d H:i:s');
                 $remark->created_by=$data->userid;
-                $remark->insert();
+                $remark->save();
             }
             DB::commit();
             return $loan->fresh();
@@ -584,8 +587,8 @@ class LoanRepository
 
     public function download($id) {
         $docs = $this->loanDocument::where('loan_id',$id)->get();
-        $zip = new \ZipArchive();
-        $zip->open('documents.zip', \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip = new ZipArchive();
+        $zip->open('documents.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
         foreach($docs as $doc) {
             $file = public_path().$doc; 
             if (file_exists($file))
@@ -593,7 +596,8 @@ class LoanRepository
                 $zip->addFile($file, '/');
             }
         }
-        return public_path().'documents.zip';
+        header('Location:'.public_path().'documents.zip');
+        die();
     }
 
     public function dashboard($data) {
@@ -650,5 +654,11 @@ class LoanRepository
         else {
             throw new Exception('Loan code is missing. Couldnt generate reference number.');
         }
+    }
+    
+    public function getDisbursedDetails($data) {
+        return $this->loan::where('id',$data['id'])->with(['lenders','applicants','documents','remarks','remarks.user'=>function($query){
+            $query->select('id','first_name','last_name');
+        }])->first();
     }
 }

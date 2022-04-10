@@ -23,4 +23,9 @@ class Channel extends Model
     public function banks() {
         return $this->hasMany(ChannelBank::class);
     }
+
+    public function executiveList() {
+        return $this->hasOne(User::class,'id','executive');
+    }
+
 }

@@ -22,20 +22,20 @@ class UserRepository
         $user->email = $data['email'];
         $user->phone = $data['phone'];
         $user->role_id = $data['role_id'];
-        if($data['roleid']==7) {
+        if($data['role_id']==7) {
             $user->parent_id = $data['userid'];
+            $user->bank_id = $data['bank_id'];
+            $user->state_id = $data['state_id'];
+            $user->branch = $data['branch'];
         } else {
             $user->parent_id = empty($data['parent_id'])?0:$data['parent_id'];
         }
         $user->password = Hash::make($data['password']);
-        // if(!$data['active']){
-        //     $user->deleted_at = date('Y-m-d H:i:s');
-        // } else {
-        //     $user->deleted_at = null;
-        // }
-        $user->bank_id = $data['bank_id'];
-        $user->state_id = $data['state_id'];
-        $user->branch = $data['branch'];
+        if(!$data['active']){
+            $user->deleted_at = date('Y-m-d H:i:s');
+        } else {
+            $user->deleted_at = null;
+        }
         $user->created_at = date('Y-m-d H:i:s');
         $user->save();
         return $user->fresh();

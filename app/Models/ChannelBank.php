@@ -24,4 +24,8 @@ class ChannelBank extends Model
     public function channel() {
         return $this->belongsTo(Channel::class);
     }
+
+    public function bankDetail() {
+        return $this->hasOne(Bank::class,'id','bank_id');
+    }
 }

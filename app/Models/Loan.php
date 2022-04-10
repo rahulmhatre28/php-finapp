@@ -2,7 +2,7 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
+use phpDocumentor\Reflection\Location;
 
 class Loan extends Model
 {
@@ -40,5 +40,17 @@ class Loan extends Model
 
     public function remarks() {
         return $this->hasMany(Remark::class);
+    }
+
+    public function executive() {
+        return $this->hasOne(User::class,'id','sales_person_id');
+    }
+
+    public function channel() {
+        return $this->hasOne(Channel::class,'id','channel_id');
+    }
+
+    public function product() {
+        return $this->hasOne(Mom::class,'key','loan_type')->whereIn('group',['business_loan','salaried_loan','other_loans']);
     }
 }

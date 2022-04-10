@@ -60,4 +60,8 @@ class LoanService
     public function dashboard($data) {
         return $this->loanRepository->dashboard($data);
     }
+
+    public function getDisbursedDetails($data) {
+        return $this->loanRepository->getDisbursedDetails($data);
+    }
 }
